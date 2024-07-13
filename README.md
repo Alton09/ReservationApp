@@ -4,36 +4,13 @@ A healthcare app that allows clients to book reservations for health care provid
 ## Entity Relationship Diagram
 ```mermaid
 erDiagram
-    CLIENT {
-        string id
-        string name
-        string email
-    }
+    CLIENT
 
-    PROVIDER {
-        string id
-        string name
-        string specialty
-        int experience
-        float rating
-    }
+    PROVIDER
 
-    SCHEDULE {
-        string id
-        string provider_id
-        string date
-        string start_time
-        string end_time
-    }
+    SCHEDULE
 
-    RESERVATION {
-        string id
-        string client_id
-        string provider_id
-        string schedule_id
-        string status
-        string time_slot
-    }
+    RESERVATION
 
     CLIENT ||--o{ RESERVATION : books
     PROVIDER ||--o{ RESERVATION : receives
