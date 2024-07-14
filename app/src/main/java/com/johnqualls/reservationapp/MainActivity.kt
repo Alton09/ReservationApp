@@ -14,10 +14,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.johnqualls.reservationapp.ui.theme.ReservationAppTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            // TODO Use Hilt
             ReservationAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(

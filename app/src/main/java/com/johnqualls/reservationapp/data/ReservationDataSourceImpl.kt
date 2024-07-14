@@ -2,8 +2,10 @@ package com.johnqualls.reservationapp.data
 
 import java.time.LocalDate
 import java.util.UUID
+import javax.inject.Singleton
 
-object ReservationDataSourceImpl : ReservationDataSource {
+@Singleton
+class ReservationDataSourceImpl : ReservationDataSource {
 
     private val clients = mutableListOf(
         Client(
@@ -22,6 +24,7 @@ object ReservationDataSourceImpl : ReservationDataSource {
             email = "alice.johnson@example.com"
         )
     )
+
 
     private val providers = mutableListOf(
         Provider(
