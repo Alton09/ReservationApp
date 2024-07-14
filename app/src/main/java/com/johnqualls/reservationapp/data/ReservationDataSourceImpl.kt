@@ -3,7 +3,7 @@ package com.johnqualls.reservationapp.data
 import java.time.LocalDate
 import java.util.UUID
 
-object DataSource {
+object ReservationDataSourceImpl : ReservationDataSource {
 
     private val clients = mutableListOf(
         Client(
@@ -105,19 +105,19 @@ object DataSource {
         )
     )
 
-    fun getClients(): List<Client> {
+    override fun getClients(): List<Client> {
         return clients
     }
 
-    fun getProviders(): List<Provider> {
+    override fun getProviders(): List<Provider> {
         return providers
     }
 
-    fun getSchedules(): List<Schedule> {
+    override fun getSchedules(): List<Schedule> {
         return schedules
     }
 
-    fun getReservations(): List<Reservation> {
+    override fun getReservations(): List<Reservation> {
         return reservations
     }
 }
