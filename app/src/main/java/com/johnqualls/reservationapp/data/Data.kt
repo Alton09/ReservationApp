@@ -1,10 +1,9 @@
 package com.johnqualls.reservationapp.data
 
 import java.time.LocalDate
-import java.util.UUID
 
 data class Provider(
-    val id: UUID,
+    val id: String,
     val name: String,
     val specialty: String,
     val experience: Int,
@@ -12,24 +11,24 @@ data class Provider(
 )
 
 data class Client(
-    val id: UUID,
+    val id: String,
     val name: String,
     val email: String
 )
 
 data class Schedule(
-    val id: UUID,
-    val providerId: UUID,
+    val id: String,
+    val providerId: String,
     val date: LocalDate,
     val startTime: String,
     val endTime: String
 )
 
 data class Reservation(
-    val id: UUID,
-    val clientId: UUID,
-    val providerId: UUID,
-    val scheduleId: UUID,
+    val id: String,
+    val clientId: String,
+    val providerId: String,
+    val scheduleId: String,
     val status: String, // e.g., "pending", "confirmed", "canceled"
     val timeSlot: String
 )
