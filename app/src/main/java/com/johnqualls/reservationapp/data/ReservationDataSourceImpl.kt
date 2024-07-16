@@ -2,9 +2,7 @@ package com.johnqualls.reservationapp.data
 
 import java.time.LocalDate
 import java.util.UUID
-import javax.inject.Singleton
 
-@Singleton
 class ReservationDataSourceImpl : ReservationDataSource {
 
     private val clients = mutableListOf(
