@@ -7,6 +7,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.johnqualls.reservationapp.ui.theme.ReservationAppTheme
 
 @Preview(showBackground = true)
@@ -19,6 +20,12 @@ private fun ProviderScreenPreview() {
 
 @Composable
 fun ProviderScreen(modifier: Modifier = Modifier) {
+    val viewModel: ProviderViewModel = hiltViewModel()
+    Content()
+}
+
+@Composable
+private fun Content() {
     Column {
         Calendar()
 
@@ -27,7 +34,7 @@ fun ProviderScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Schedule(modifier: Modifier = Modifier) {
+private fun Schedule(modifier: Modifier = Modifier) {
     Column {
         Text(text = "Schedule", style = MaterialTheme.typography.headlineSmall)
         TextButton(onClick = { /*TODO*/ }) {

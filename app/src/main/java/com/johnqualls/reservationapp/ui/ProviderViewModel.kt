@@ -6,6 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ReservationViewModel @Inject constructor(private val reservationDataSource: ReservationDataSource) : ViewModel() {
+class ProviderViewModel @Inject constructor(private val reservationDataSource: ReservationDataSource) : ViewModel() {
 
 }
