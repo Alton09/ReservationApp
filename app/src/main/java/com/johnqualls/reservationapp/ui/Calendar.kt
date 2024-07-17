@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,8 +36,6 @@ import java.time.YearMonth
 private fun CalendarProviderPreview() {
     ReservationAppTheme {
         Calendar(
-            currentDayDotColor = Color.Gray,
-            selectedDayBackgroundColor = Color.Gray,
             selectedDays = setOf(
                 LocalDate.now().minusDays(3),
                 LocalDate.now().plusDays(2),
@@ -51,8 +50,6 @@ private fun CalendarProviderPreview() {
 private fun CalendarClientPreview() {
     ReservationAppTheme {
         Calendar(
-            currentDayDotColor = Color.Gray,
-            selectedDayBackgroundColor = Color.Gray,
             enabledDays = setOf(
                 LocalDate.now().minusDays(3),
                 LocalDate.now().plusDays(2),
@@ -70,8 +67,8 @@ private fun CalendarClientPreview() {
 
 @Composable
 fun Calendar(
-    currentDayDotColor: Color,
-    selectedDayBackgroundColor: Color,
+    currentDayDotColor: Color = MaterialTheme.colorScheme.secondary,
+    selectedDayBackgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     enabledDays: Set<LocalDate>? = null,
     selectedDays: Set<LocalDate>? = null
 ) {
