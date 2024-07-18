@@ -104,7 +104,13 @@ fun Calendar(
                             modifier = Modifier
                                 .weight(1f)
                                 .aspectRatio(1f)
-                                .padding(4.dp),
+                                .padding(2.dp)
+                                .conditional(selectedDays != null) {
+                                    background(
+                                        color = if (selectedDays!!.contains(date)) selectedDayBackgroundColor else Color.Transparent,
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
+                                },
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -120,14 +126,7 @@ fun Calendar(
                             }
                             Spacer(modifier = Modifier.height(4.dp))
                             Box(
-                                modifier = Modifier
-                                    .size(30.dp)
-                                    .conditional(selectedDays != null) {
-                                        background(
-                                            color = if (selectedDays!!.contains(date)) selectedDayBackgroundColor else Color.Transparent,
-                                            shape = RoundedCornerShape(4.dp)
-                                        )
-                                    },
+                                modifier = Modifier.size(30.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
