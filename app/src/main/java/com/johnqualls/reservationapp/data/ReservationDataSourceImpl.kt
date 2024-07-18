@@ -73,7 +73,7 @@ class ReservationDataSourceImpl : ReservationDataSource {
         Schedule(
             id = UUID.randomUUID().toString(),
             providerId = providers[2].id,
-            date = LocalDate.of(2024, 7, 18),
+            date = LocalDate.of(2024, 7, 19),
             startTime = "14:00",
             endTime = "15:00"
         )
