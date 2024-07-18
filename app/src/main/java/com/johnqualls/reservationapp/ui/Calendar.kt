@@ -132,8 +132,7 @@ fun Calendar(
                             ) {
                                 Text(
                                     text = day.toString(),
-                                    fontSize = 16.sp,
-                                    color = if (isEnabled) Color.Black else Color.Gray,
+                                    style = MaterialTheme.typography.bodyLarge,
                                     modifier = Modifier.graphicsLayer {
                                         alpha = if (isEnabled) 1f else 0.5f
                                     }
@@ -158,8 +157,7 @@ private fun DaysOfTheWeekHeader() {
         daysOfWeek.forEach { day ->
             Text(
                 text = day,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
         }
