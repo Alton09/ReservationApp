@@ -22,7 +22,6 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
     private fun getProvidersSchedules() {
         // TODO allow choosing of provider
         val provider = reservationDataSource.getProviders().first()
-        val schedules = reservationDataSource.getSchedules(provider.id)
-        _uiState.update { it.copy(isLoading = false, provider = provider, schedules = schedules) }
+        _uiState.update { it.copy(isLoading = false, provider = provider) }
     }
 }

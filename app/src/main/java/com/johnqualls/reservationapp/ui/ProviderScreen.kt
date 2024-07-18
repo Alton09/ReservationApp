@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -56,7 +57,7 @@ private fun ScheduleCalendar(uiState: ProviderUiState) {
     Text(text = "Schedule", style = MaterialTheme.typography.headlineSmall)
     Spacer(modifier = Modifier.height(8.dp))
     Calendar(
-        selectedDays = uiState.schedules.map { it.date }.toSet()
+        selectedDay = uiState.selectedSchedule?.date
     )
 }
 
@@ -64,11 +65,27 @@ private fun ScheduleCalendar(uiState: ProviderUiState) {
 private fun ScheduleShift(modifier: Modifier = Modifier) {
     Column {
         Text("Shift", style = MaterialTheme.typography.headlineSmall)
-        TextButton(onClick = { /*TODO*/ }) {
-            Text(text = "Start: 9:00 AM", style = MaterialTheme.typography.titleMedium)
+        TextButton(
+            onClick = { /*TODO*/ },
+            colors = ButtonDefaults.textButtonColors()
+                .copy(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        ) {
+            Text(
+                text = "Start: 9:00 AM",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         }
-        TextButton(onClick = { /*TODO*/ }) {
-            Text(text = "End: 5:00 PM", style = MaterialTheme.typography.titleMedium)
+        TextButton(
+            onClick = { /*TODO*/ },
+            colors = ButtonDefaults.textButtonColors()
+                .copy(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        ) {
+            Text(
+                text = "End: 5:00 PM",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         }
     }
 }

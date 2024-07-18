@@ -6,5 +6,5 @@ import com.johnqualls.reservationapp.data.Schedule
 data class ProviderUiState(
     val isLoading: Boolean = true,
     val provider: Provider? = null,
-    val schedules: List<Schedule> = emptyList(),
+    val selectedSchedule: Schedule? = null
 )

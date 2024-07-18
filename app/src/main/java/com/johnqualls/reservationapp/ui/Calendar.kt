@@ -20,11 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.johnqualls.reservationapp.conditional
 import com.johnqualls.reservationapp.ui.theme.ReservationAppTheme
 import java.time.LocalDate
@@ -36,11 +34,8 @@ import java.time.YearMonth
 private fun CalendarProviderPreview() {
     ReservationAppTheme {
         Calendar(
-            selectedDays = setOf(
-                LocalDate.now().minusDays(3),
-                LocalDate.now().plusDays(2),
-                LocalDate.now().minusWeeks(1)
-            )
+            selectedDay =
+            LocalDate.now().minusDays(3),
         )
     }
 }
@@ -71,7 +66,7 @@ fun Calendar(
     currentDayDotColor: Color = MaterialTheme.colorScheme.secondary,
     selectedDayBackgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     enabledDays: Set<LocalDate>? = null,
-    selectedDays: Set<LocalDate>? = null
+    selectedDay: LocalDate? = null
 ) {
     val currentDate = LocalDate.now()
     val yearMonth = YearMonth.now()
@@ -106,9 +101,9 @@ fun Calendar(
                                 .weight(1f)
                                 .aspectRatio(1f)
                                 .padding(2.dp)
-                                .conditional(selectedDays != null) {
+                                .conditional(selectedDay != null) {
                                     background(
-                                        color = if (selectedDays!!.contains(date)) selectedDayBackgroundColor else Color.Transparent,
+                                        color = if (selectedDay == date) selectedDayBackgroundColor else Color.Transparent,
                                         shape = RoundedCornerShape(4.dp)
                                     )
                                 },
