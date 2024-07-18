@@ -67,6 +67,7 @@ private fun CalendarClientPreview() {
 
 @Composable
 fun Calendar(
+    modifier: Modifier = Modifier,
     currentDayDotColor: Color = MaterialTheme.colorScheme.secondary,
     selectedDayBackgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     enabledDays: Set<LocalDate>? = null,
@@ -77,7 +78,7 @@ fun Calendar(
     val firstDayOfMonth = yearMonth.atDay(1)
     val lastDayOfMonth = yearMonth.atEndOfMonth()
 
-    Column {
+    Column(modifier = modifier) {
         DaysOfTheWeekHeader()
 
         // Days of the month
@@ -86,7 +87,7 @@ fun Calendar(
 
         var dayIndex = 0
 
-        for (week in 0..5) {
+        for (week in 0..4) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 for (dayOfWeek in 0..6) {
                     if (week == 0 && dayOfWeek < firstDayOfWeek || dayIndex >= daysInMonth.size) {
