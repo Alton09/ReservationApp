@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.johnqualls.reservationapp.ui.theme.ReservationAppTheme
 
 @Preview(showBackground = true)
@@ -21,13 +22,14 @@ private fun ProviderScreenPreview() {
 @Composable
 fun ProviderScreen(modifier: Modifier = Modifier) {
     val viewModel: ProviderViewModel = hiltViewModel()
-    Content()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    Content(uiState)
 }
 
 @Composable
-private fun Content() {
+private fun Content(uiState: ProviderUiState) {
     Column {
-        Calendar()
+        Calendar(selectedDays = uiState.schedules.map { it.date }.toSet())
 
         Schedule()
     }

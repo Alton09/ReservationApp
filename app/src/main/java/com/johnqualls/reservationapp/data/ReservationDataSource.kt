@@ -6,7 +6,7 @@ interface ReservationDataSource {
 
     fun getProviders(): List<Provider>
 
-    fun getSchedules(): List<Schedule>
+    fun getSchedules(providerId: String): List<Schedule>
 
     fun getReservations(): List<Reservation>
 }

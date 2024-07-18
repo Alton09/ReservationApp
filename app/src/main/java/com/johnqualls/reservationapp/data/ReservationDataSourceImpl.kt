@@ -52,28 +52,28 @@ class ReservationDataSourceImpl : ReservationDataSource {
         Schedule(
             id = UUID.randomUUID().toString(),
             providerId = providers[0].id,
-            date = LocalDate.of(2024, 7, 14),
+            date = LocalDate.of(2024, 7, 22),
             startTime = "08:00",
             endTime = "09:00"
         ),
         Schedule(
             id = UUID.randomUUID().toString(),
             providerId = providers[0].id,
-            date = LocalDate.of(2024, 7, 14),
+            date = LocalDate.of(2024, 7, 23),
             startTime = "10:00",
             endTime = "11:00"
         ),
         Schedule(
             id = UUID.randomUUID().toString(),
             providerId = providers[1].id,
-            date = LocalDate.of(2024, 7, 15),
+            date = LocalDate.of(2024, 7, 18),
             startTime = "09:00",
             endTime = "10:00"
         ),
         Schedule(
             id = UUID.randomUUID().toString(),
             providerId = providers[2].id,
-            date = LocalDate.of(2024, 7, 16),
+            date = LocalDate.of(2024, 7, 18),
             startTime = "14:00",
             endTime = "15:00"
         )
@@ -114,8 +114,8 @@ class ReservationDataSourceImpl : ReservationDataSource {
         return providers
     }
 
-    override fun getSchedules(): List<Schedule> {
-        return schedules
+    override fun getSchedules(providerId: String): List<Schedule> {
+        return schedules.filter { it.providerId == providerId }
     }
 
     override fun getReservations(): List<Reservation> {
