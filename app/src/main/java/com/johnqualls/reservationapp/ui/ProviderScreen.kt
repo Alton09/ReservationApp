@@ -32,7 +32,6 @@ import com.johnqualls.reservationapp.R
 import com.johnqualls.reservationapp.data.Provider
 import com.johnqualls.reservationapp.data.Schedule
 import com.johnqualls.reservationapp.ui.theme.ReservationAppTheme
-import java.time.LocalDate
 
 @Preview(showBackground = true)
 @Composable
@@ -53,7 +52,7 @@ fun ProviderScreen(modifier: Modifier = Modifier) {
 private fun Content(
     modifier: Modifier,
     uiState: ProviderUiState,
-    onDateClick: (LocalDate) -> Unit
+    onDateClick: (Long) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -78,7 +77,7 @@ fun ProviderDetails(provider: Provider) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ScheduleCalendar(uiState: ProviderUiState, onDateClick: (LocalDate) -> Unit) {
+private fun ScheduleCalendar(uiState: ProviderUiState, onDateClick: (Long) -> Unit) {
     Spacer(modifier = Modifier.height(12.dp))
     Text(text = "Schedule", style = MaterialTheme.typography.headlineSmall)
     Spacer(modifier = Modifier.height(8.dp))
@@ -88,7 +87,8 @@ private fun ScheduleCalendar(uiState: ProviderUiState, onDateClick: (LocalDate) 
         yearRange = IntRange(2024, 2025),
         initialDisplayMode = DisplayMode.Picker
     )
-    DatePicker(state = dateState)
+    dateState.selectedDateMillis?.let { onDateClick(it) }
+    DatePicker(state = dateState, title = null)
 }
 
 @Composable
