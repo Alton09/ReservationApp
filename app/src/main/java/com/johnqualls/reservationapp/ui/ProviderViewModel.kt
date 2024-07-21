@@ -25,6 +25,20 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
         getTodaysSchedule()
     }
 
+    fun getSchedule(date: Long) {
+        val schedule = reservationDataSource.getSchedule(provider.id, date.toLocalDate())
+        _uiState.update {
+            it.copy(
+                selectedDate = date,
+                selectedSchedule = schedule
+            )
+        }
+    }
+
+    fun addNewSchedule() {
+        // TODO
+    }
+
     private fun getTodaysSchedule() {
         // TODO Allow choosing of provider
         val todaysDate = LocalDate.now()
@@ -35,16 +49,6 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
                 provider = provider,
                 selectedDate = todaysDate.toMilliseconds(),
                 selectedSchedule = todaysSchedule
-            )
-        }
-    }
-
-    fun getSchedule(date: Long) {
-        val schedule = reservationDataSource.getSchedule(provider.id, date.toLocalDate())
-        _uiState.update {
-            it.copy(
-                selectedDate = date,
-                selectedSchedule = schedule
             )
         }
     }

@@ -20,6 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -45,14 +49,15 @@ private fun ProviderScreenPreview() {
 fun ProviderScreen(modifier: Modifier = Modifier) {
     val viewModel: ProviderViewModel = hiltViewModel()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    Content(modifier, uiState, viewModel::getSchedule)
+    Content(modifier, uiState, viewModel::getSchedule, viewModel::addNewSchedule)
 }
 
 @Composable
 private fun Content(
     modifier: Modifier,
     uiState: ProviderUiState,
-    onDateClick: (Long) -> Unit
+    onDateClick: (Long) -> Unit,
+    onAddNewSchedule: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -62,7 +67,7 @@ private fun Content(
         uiState.provider?.let { provider ->
             ProviderDetails(provider)
             ScheduleCalendar(uiState, onDateClick)
-            ScheduleShift(uiState.selectedSchedule)
+            ScheduleShift(uiState.selectedSchedule, onAddNewSchedule)
         }
     }
 }
@@ -92,37 +97,55 @@ private fun ScheduleCalendar(uiState: ProviderUiState, onDateClick: (Long) -> Un
 }
 
 @Composable
-private fun ScheduleShift(schedule: Schedule?) {
+private fun ScheduleShift(
+    schedule: Schedule?,
+    onAddNewSchedule: () -> Unit
+) {
     schedule?.let { schedule ->
-        Column {
-            TextButton(
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.textButtonColors()
-                    .copy(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Text(
-                    text = "Start: 9:00 AM",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-            TextButton(
-                onClick = { /*TODO*/ },
-                colors = ButtonDefaults.textButtonColors()
-                    .copy(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            ) {
-                Text(
-                    text = "End: 5:00 PM",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
-        }
+        CreatedSchedule()
     } ?: run {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+        NewSchedule(onAddNewSchedule)
+    }
+}
+
+@Composable
+private fun CreatedSchedule() {
+    Column {
+        TextButton(
+            onClick = { /*TODO*/ },
+            colors = ButtonDefaults.textButtonColors()
+                .copy(containerColor = MaterialTheme.colorScheme.primaryContainer)
         ) {
+            Text(
+                text = "Start: 9:00 AM",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        }
+        TextButton(
+            onClick = { /*TODO*/ },
+            colors = ButtonDefaults.textButtonColors()
+                .copy(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        ) {
+            Text(
+                text = "End: 5:00 PM",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        }
+    }
+}
+
+@Composable
+private fun NewSchedule(onAddNewSchedule: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        var shouldShowDatePicker by remember { mutableStateOf(false) }
+        if (shouldShowDatePicker) {
+            ScheduleTimePicker { shouldShowDatePicker = false }
+        } else {
             Image(
                 modifier = Modifier.size(85.dp),
                 painter = painterResource(id = R.drawable.calendar),
@@ -136,9 +159,15 @@ private fun ScheduleShift(schedule: Schedule?) {
                 style = MaterialTheme.typography.bodyLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = { shouldShowDatePicker = true }) {
                 Text(text = "Add Schedule")
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ScheduleTimePicker(onDismiss: () -> Unit) {
+    TimePickerDialog({}, onDismiss = onDismiss)
 }

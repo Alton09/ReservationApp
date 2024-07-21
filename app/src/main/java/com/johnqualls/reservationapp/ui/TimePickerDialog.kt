@@ -22,7 +22,6 @@ fun TimePickerDialog(
     val timePickerState = rememberTimePickerState(
         initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
         initialMinute = currentTime.get(Calendar.MINUTE),
-        is24Hour = true,
     )
 
     TimePickerDialogStateless(
