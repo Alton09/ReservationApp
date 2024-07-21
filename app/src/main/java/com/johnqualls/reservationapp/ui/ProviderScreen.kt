@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -47,7 +50,11 @@ private fun Content(
     uiState: ProviderUiState,
     onDateClick: (LocalDate) -> Unit
 ) {
-    Column(modifier = modifier.padding(horizontal = 16.dp)) {
+    Column(
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
         uiState.provider?.let { provider ->
             ProviderDetails(provider)
             ScheduleCalendar(uiState, onDateClick)
@@ -114,11 +121,15 @@ private fun ScheduleShift(schedule: Schedule?) {
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
             )
             Text(text = "No Schedule", style = MaterialTheme.typography.headlineSmall)
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "There is no schedule for the selected day",
                 style = MaterialTheme.typography.bodyLarge
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = "Add Schedule")
+            }
         }
     }
 }
