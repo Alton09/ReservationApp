@@ -1,6 +1,7 @@
 package com.johnqualls.reservationapp.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -75,7 +76,8 @@ fun Calendar(
     currentDayDotColor: Color = MaterialTheme.colorScheme.secondary,
     selectedDayBackgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     enabledDays: Set<LocalDate>? = null,
-    selectedDay: LocalDate? = null
+    selectedDay: LocalDate? = null,
+    onDateClick: (LocalDate) -> Unit = {}
 ) {
     val currentDate = LocalDate.now()
     val yearMonth = YearMonth.now()
@@ -115,7 +117,8 @@ fun Calendar(
                                         color = if (selectedDay == date) selectedDayBackgroundColor else Color.Transparent,
                                         shape = RoundedCornerShape(4.dp)
                                     )
-                                },
+                                }
+                                .clickable { onDateClick(date) },
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
