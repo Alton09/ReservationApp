@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.LocalDate
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +32,7 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
             it.copy(
                 isLoading = false,
                 provider = provider,
-                selectedDate = todaysDate,
+                selectedDate = todaysDate.toMilliseconds(),
                 selectedSchedule = todaysSchedule
             )
         }
@@ -39,6 +40,15 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
 
     fun getSchedule(date: LocalDate) {
         val schedule = reservationDataSource.getSchedule(provider.id, date)
-        _uiState.update { it.copy(selectedDate = date, selectedSchedule = schedule) }
+        _uiState.update {
+            it.copy(
+                selectedDate = date.toMilliseconds(),
+                selectedSchedule = schedule
+            )
+        }
+    }
+
+    private fun LocalDate.toMilliseconds(): Long {
+        return atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 }

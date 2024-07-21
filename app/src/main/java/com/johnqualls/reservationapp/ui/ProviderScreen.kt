@@ -11,9 +11,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,15 +76,19 @@ fun ProviderDetails(provider: Provider) {
     Text(text = provider.specialty, style = MaterialTheme.typography.bodyLarge)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScheduleCalendar(uiState: ProviderUiState, onDateClick: (LocalDate) -> Unit) {
     Spacer(modifier = Modifier.height(12.dp))
     Text(text = "Schedule", style = MaterialTheme.typography.headlineSmall)
     Spacer(modifier = Modifier.height(8.dp))
-    Calendar(
-        selectedDay = uiState.selectedDate,
-        onDateClick = { onDateClick(it) }
+    val dateState = rememberDatePickerState(
+        initialSelectedDateMillis = uiState.selectedDate,
+        selectableDates = DatePickerDefaults.AllDates,
+        yearRange = IntRange(2024, 2025),
+        initialDisplayMode = DisplayMode.Picker
     )
+    DatePicker(state = dateState)
 }
 
 @Composable
