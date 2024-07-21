@@ -59,6 +59,15 @@ private fun CalendarClientPreview() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun CurrentDaySelectedPreview() {
+    ReservationAppTheme {
+        Calendar(
+            selectedDay = LocalDate.now(),
+        )
+    }
+}
 
 @Composable
 fun Calendar(
