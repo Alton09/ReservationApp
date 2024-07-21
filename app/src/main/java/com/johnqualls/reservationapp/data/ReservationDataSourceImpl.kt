@@ -118,6 +118,10 @@ class ReservationDataSourceImpl : ReservationDataSource {
         return schedules.filter { it.providerId == providerId }
     }
 
+    override fun getSchedule(providerId: String, localDate: LocalDate): Schedule? {
+        return schedules.find { it.providerId == providerId && it.date == localDate }
+    }
+
     override fun getReservations(): List<Reservation> {
         return reservations
     }
