@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.johnqualls.reservationapp.data.Provider
 import com.johnqualls.reservationapp.data.ReservationDataSource
 import com.johnqualls.reservationapp.data.Schedule
+import com.johnqualls.reservationapp.to12HourFormat
 import com.johnqualls.reservationapp.toLocalDate
 import com.johnqualls.reservationapp.toMilliseconds
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +33,8 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
         _uiState.update {
             it.copy(
                 selectedDate = date,
-                selectedSchedule = schedule
+                scheduleStartTime = schedule?.startTime?.to12HourFormat(),
+                scheduleEndTime = schedule?.endTime?.to12HourFormat()
             )
         }
     }
@@ -45,7 +47,12 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
             endTime = scheduleTimes.second
         )
         reservationDataSource.createSchedule(newSchedule)
-        _uiState.update { it.copy(selectedSchedule = newSchedule) }
+        _uiState.update {
+            it.copy(
+                scheduleStartTime = newSchedule.startTime.to12HourFormat(),
+                scheduleEndTime = newSchedule.endTime.to12HourFormat()
+            )
+        }
     }
 
     private fun getTodaysSchedule() {
@@ -57,7 +64,8 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
                 isLoading = false,
                 provider = provider,
                 selectedDate = todaysDate.toMilliseconds(),
-                selectedSchedule = todaysSchedule
+                scheduleStartTime = todaysSchedule?.startTime?.to12HourFormat(),
+                scheduleEndTime = todaysSchedule?.endTime?.to12HourFormat()
             )
         }
     }

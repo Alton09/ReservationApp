@@ -34,7 +34,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.johnqualls.reservationapp.R
 import com.johnqualls.reservationapp.data.Provider
-import com.johnqualls.reservationapp.data.Schedule
 import com.johnqualls.reservationapp.ui.theme.ReservationAppTheme
 import java.time.LocalTime
 
@@ -68,7 +67,7 @@ private fun Content(
         uiState.provider?.let { provider ->
             ProviderDetails(provider)
             ScheduleCalendar(uiState, onDateClick)
-            ScheduleShift(uiState.selectedSchedule, onAddNewSchedule)
+            ScheduleShift(uiState.scheduleStartTime, uiState.scheduleEndTime, onAddNewSchedule)
         }
     }
 }
@@ -99,12 +98,13 @@ private fun ScheduleCalendar(uiState: ProviderUiState, onDateClick: (Long) -> Un
 
 @Composable
 private fun ScheduleShift(
-    schedule: Schedule?,
+    startTime: String?,
+    endTime: String?,
     onAddNewSchedule: (Pair<LocalTime, LocalTime>) -> Unit
 ) {
-    schedule?.let { schedule ->
-        ExistingSchedule(schedule.startTime.toString(), schedule.endTime.toString())
-    } ?: run {
+    if (startTime != null && endTime != null) {
+        ExistingSchedule(startTime.toString(), endTime.toString())
+    } else {
         NewSchedule(onAddNewSchedule)
     }
 }
