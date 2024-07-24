@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.johnqualls.reservationapp.client.ui.ClientScreen
 import com.johnqualls.reservationapp.provider.ui.ProviderScreen
 
 @Composable
@@ -17,7 +18,7 @@ fun ReservationNavHost(navController: NavHostController, modifier: Modifier) {
             ProviderScreen()
         }
         composable("CLIENT") {
-
+            ClientScreen()
         }
     }
 }

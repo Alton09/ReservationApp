@@ -22,6 +22,7 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
     private val _uiState = MutableStateFlow(ProviderUiState())
     val uiState: StateFlow<ProviderUiState> = _uiState.asStateFlow()
 
+    // TODO Allow user to select provider
     private val provider: Provider = reservationDataSource.getProviders().first()
 
     init {
