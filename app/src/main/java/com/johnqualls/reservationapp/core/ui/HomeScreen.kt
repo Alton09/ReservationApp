@@ -29,7 +29,7 @@ private fun HomeScreenPreview() {
 }
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onProviderClick: () -> Unit = {}) {
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -42,7 +42,7 @@ fun HomeScreen() {
             painter = painterResource(id = R.drawable.henry_logo_black),
             contentDescription = "Henry Meds Logo"
         )
-        Button(modifier = Modifier.width(150.dp), onClick = { /*TODO*/ }) {
+        Button(modifier = Modifier.width(150.dp), onClick = onProviderClick) {
             Text(text = "Provider")
         }
         Spacer(modifier = Modifier.height(16.dp))

@@ -74,7 +74,7 @@ private fun Content(
 }
 
 @Composable
-fun ProviderDetails(provider: Provider) {
+private fun ProviderDetails(provider: Provider) {
     Text(text = "Provider", style = MaterialTheme.typography.headlineSmall)
     Spacer(modifier = Modifier.height(8.dp))
     Text(text = provider.name, style = MaterialTheme.typography.titleMedium)
