@@ -36,6 +36,7 @@ import com.johnqualls.reservationapp.R
 import com.johnqualls.reservationapp.data.Provider
 import com.johnqualls.reservationapp.data.Schedule
 import com.johnqualls.reservationapp.ui.theme.ReservationAppTheme
+import java.time.LocalTime
 
 @Preview(showBackground = true)
 @Composable
@@ -57,7 +58,7 @@ private fun Content(
     modifier: Modifier,
     uiState: ProviderUiState,
     onDateClick: (Long) -> Unit,
-    onAddNewSchedule: () -> Unit
+    onAddNewSchedule: (Pair<LocalTime, LocalTime>) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -99,7 +100,7 @@ private fun ScheduleCalendar(uiState: ProviderUiState, onDateClick: (Long) -> Un
 @Composable
 private fun ScheduleShift(
     schedule: Schedule?,
-    onAddNewSchedule: () -> Unit
+    onAddNewSchedule: (Pair<LocalTime, LocalTime>) -> Unit
 ) {
     schedule?.let { schedule ->
         CreatedSchedule()
@@ -137,37 +138,75 @@ private fun CreatedSchedule() {
 }
 
 @Composable
-private fun NewSchedule(onAddNewSchedule: () -> Unit) {
+private fun NewSchedule(onAddNewSchedule: (Pair<LocalTime, LocalTime>) -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // TOOO move ui state to view model
         var shouldShowDatePicker by remember { mutableStateOf(false) }
         if (shouldShowDatePicker) {
-            ScheduleTimePicker { shouldShowDatePicker = false }
+            ScheduleTimePicker(
+                onConfirm = {
+                    shouldShowDatePicker = false
+                    onAddNewSchedule(it)
+                },
+                onDismiss = {
+                    shouldShowDatePicker = false
+                }
+            )
         } else {
-            Image(
-                modifier = Modifier.size(85.dp),
-                painter = painterResource(id = R.drawable.calendar),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
-            )
-            Text(text = "No Schedule", style = MaterialTheme.typography.headlineSmall)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "There is no schedule for the selected day",
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { shouldShowDatePicker = true }) {
-                Text(text = "Add Schedule")
-            }
+            NoSchedule { shouldShowDatePicker = true }
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScheduleTimePicker(onDismiss: () -> Unit) {
-    TimePickerDialog({}, onDismiss = onDismiss)
+fun ScheduleTimePicker(onConfirm: (Pair<LocalTime, LocalTime>) -> Unit, onDismiss: () -> Unit) {
+    // TOOO move ui state to view model
+    var shouldShowFirstPicker by remember { mutableStateOf(true) }
+    var startDate: LocalTime? by remember { mutableStateOf(null) }
+    var endDate: LocalTime? by remember { mutableStateOf(null) }
+    if (shouldShowFirstPicker) {
+        TimePickerDialog(
+            "Start Time",
+            {
+                startDate = LocalTime.of(it.hour, it.minute)
+                shouldShowFirstPicker = false
+            },
+            onDismiss = onDismiss
+        )
+    } else {
+        TimePickerDialog(
+            "End Time",
+            {
+                endDate = LocalTime.of(it.hour, it.minute)
+                if (startDate != null && endDate != null) {
+                    onConfirm(startDate!! to endDate!!)
+                }
+            },
+            onDismiss = onDismiss
+        )
+    }
+}
+
+@Composable
+private fun NoSchedule(onAddSchedule: () -> Unit) {
+    Image(
+        modifier = Modifier.size(85.dp),
+        painter = painterResource(id = R.drawable.calendar),
+        contentDescription = null,
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+    )
+    Text(text = "No Schedule", style = MaterialTheme.typography.headlineSmall)
+    Spacer(modifier = Modifier.height(8.dp))
+    Text(
+        text = "There is no schedule for the selected day",
+        style = MaterialTheme.typography.bodyLarge
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    Button(onClick = onAddSchedule) {
+        Text(text = "Add Schedule")
+    }
 }

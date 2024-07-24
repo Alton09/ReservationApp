@@ -3,6 +3,7 @@ package com.johnqualls.reservationapp.ui
 import androidx.lifecycle.ViewModel
 import com.johnqualls.reservationapp.data.Provider
 import com.johnqualls.reservationapp.data.ReservationDataSource
+import com.johnqualls.reservationapp.data.Schedule
 import com.johnqualls.reservationapp.toLocalDate
 import com.johnqualls.reservationapp.toMilliseconds
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,8 +37,15 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
         }
     }
 
-    fun addNewSchedule() {
-        // TODO
+    fun addNewSchedule(scheduleTimes: Pair<LocalTime, LocalTime>) {
+        val newSchedule = Schedule(
+            providerId = provider.id,
+            date = uiState.value.selectedDate.toLocalDate(),
+            startTime = scheduleTimes.first,
+            endTime = scheduleTimes.second
+        )
+        reservationDataSource.createSchedule(newSchedule)
+        _uiState.update { it.copy(selectedSchedule = newSchedule) }
     }
 
     private fun getTodaysSchedule() {

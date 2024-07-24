@@ -1,23 +1,20 @@
 package com.johnqualls.reservationapp.data
 
 import java.time.LocalDate
-import java.util.UUID
+import java.time.LocalTime
 
 class ReservationDataSourceImpl : ReservationDataSource {
 
     private val clients = mutableListOf(
         Client(
-            id = UUID.randomUUID().toString(),
             name = "John Doe",
             email = "john.doe@example.com"
         ),
         Client(
-            id = UUID.randomUUID().toString(),
             name = "Jane Smith",
             email = "jane.smith@example.com"
         ),
         Client(
-            id = UUID.randomUUID().toString(),
             name = "Alice Johnson",
             email = "alice.johnson@example.com"
         )
@@ -26,21 +23,18 @@ class ReservationDataSourceImpl : ReservationDataSource {
 
     private val providers = mutableListOf(
         Provider(
-            id = UUID.randomUUID().toString(),
             name = "Dr. Joyce Wrice",
             specialty = "Neurology",
             experience = 10,
             rating = 4.8f
         ),
         Provider(
-            id = UUID.randomUUID().toString(),
             name = "Dr. Mark Lee",
             specialty = "Cardiology",
             experience = 15,
             rating = 4.6f
         ),
         Provider(
-            id = UUID.randomUUID().toString(),
             name = "Dr. Emma Davis",
             specialty = "Dermatology",
             experience = 8,
@@ -50,38 +44,33 @@ class ReservationDataSourceImpl : ReservationDataSource {
 
     private val schedules = mutableListOf(
         Schedule(
-            id = UUID.randomUUID().toString(),
             providerId = providers[0].id,
             date = LocalDate.of(2024, 7, 22),
-            startTime = "08:00",
-            endTime = "09:00"
+            startTime = LocalTime.of(8, 0),
+            endTime = LocalTime.of(9, 0)
         ),
         Schedule(
-            id = UUID.randomUUID().toString(),
             providerId = providers[0].id,
             date = LocalDate.of(2024, 7, 23),
-            startTime = "10:00",
-            endTime = "11:00"
+            startTime = LocalTime.of(10, 0),
+            endTime = LocalTime.of(11, 0)
         ),
         Schedule(
-            id = UUID.randomUUID().toString(),
             providerId = providers[1].id,
             date = LocalDate.of(2024, 7, 18),
-            startTime = "09:00",
-            endTime = "10:00"
+            startTime = LocalTime.of(9, 0),
+            endTime = LocalTime.of(10, 0)
         ),
         Schedule(
-            id = UUID.randomUUID().toString(),
             providerId = providers[2].id,
             date = LocalDate.of(2024, 7, 19),
-            startTime = "14:00",
-            endTime = "15:00"
+            startTime = LocalTime.of(14, 0),
+            endTime = LocalTime.of(15, 0)
         )
     )
 
     private val reservations = mutableListOf(
         Reservation(
-            id = UUID.randomUUID().toString(),
             clientId = clients[0].id,
             providerId = providers[0].id,
             scheduleId = schedules[0].id,
@@ -89,7 +78,6 @@ class ReservationDataSourceImpl : ReservationDataSource {
             timeSlot = "08:00-09:00"
         ),
         Reservation(
-            id = UUID.randomUUID().toString(),
             clientId = clients[1].id,
             providerId = providers[1].id,
             scheduleId = schedules[2].id,
@@ -97,7 +85,6 @@ class ReservationDataSourceImpl : ReservationDataSource {
             timeSlot = "09:00-10:00"
         ),
         Reservation(
-            id = UUID.randomUUID().toString(),
             clientId = clients[2].id,
             providerId = providers[2].id,
             scheduleId = schedules[3].id,
@@ -124,5 +111,11 @@ class ReservationDataSourceImpl : ReservationDataSource {
 
     override fun getReservations(): List<Reservation> {
         return reservations
+    }
+
+    override fun createSchedule(schedule: Schedule) {
+        schedules.add(
+            schedule
+        )
     }
 }

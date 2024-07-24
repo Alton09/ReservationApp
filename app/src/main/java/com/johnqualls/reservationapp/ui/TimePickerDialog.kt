@@ -13,6 +13,7 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerDialog(
+    title: String,
     onConfirm: (TimePickerState) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -26,21 +27,25 @@ fun TimePickerDialog(
 
     TimePickerDialogStateless(
         onDismiss = { onDismiss() },
-        onConfirm = { onConfirm(timePickerState) }
-    ) {
-        TimePicker(
-            state = timePickerState,
-        )
-    }
+        onConfirm = { onConfirm(timePickerState) },
+        title = title,
+        {
+            TimePicker(
+                state = timePickerState,
+            )
+        },
+    )
 }
 
 @Composable
 private fun TimePickerDialogStateless(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
+    title: String,
     content: @Composable () -> Unit
 ) {
     AlertDialog(
+        title = { Text(title) },
         onDismissRequest = onDismiss,
         dismissButton = {
             TextButton(onClick = { onDismiss() }) {
