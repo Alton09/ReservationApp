@@ -1,4 +1,4 @@
-package com.johnqualls.reservationapp.data
+package com.johnqualls.reservationapp.core.data
 
 import java.time.LocalDate
 

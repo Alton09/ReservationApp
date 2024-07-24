@@ -1,4 +1,4 @@
-package com.johnqualls.reservationapp.ui.theme
+package com.johnqualls.reservationapp.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

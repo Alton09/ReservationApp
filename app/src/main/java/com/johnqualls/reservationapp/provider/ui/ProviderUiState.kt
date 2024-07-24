@@ -1,6 +1,6 @@
-package com.johnqualls.reservationapp.ui
+package com.johnqualls.reservationapp.provider.ui
 
-import com.johnqualls.reservationapp.data.Provider
+import com.johnqualls.reservationapp.core.data.Provider
 
 data class ProviderUiState(
     val isLoading: Boolean = true,

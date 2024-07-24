@@ -1,7 +1,7 @@
-package com.johnqualls.reservationapp
+package com.johnqualls.reservationapp.core
 
-import com.johnqualls.reservationapp.data.ReservationDataSource
-import com.johnqualls.reservationapp.data.ReservationDataSourceImpl
+import com.johnqualls.reservationapp.core.data.ReservationDataSource
+import com.johnqualls.reservationapp.core.data.ReservationDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

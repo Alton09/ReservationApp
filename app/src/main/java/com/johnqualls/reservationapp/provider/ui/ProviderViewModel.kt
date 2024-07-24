@@ -1,12 +1,12 @@
-package com.johnqualls.reservationapp.ui
+package com.johnqualls.reservationapp.provider.ui
 
 import androidx.lifecycle.ViewModel
-import com.johnqualls.reservationapp.data.Provider
-import com.johnqualls.reservationapp.data.ReservationDataSource
-import com.johnqualls.reservationapp.data.Schedule
-import com.johnqualls.reservationapp.to12HourFormat
-import com.johnqualls.reservationapp.toLocalDate
-import com.johnqualls.reservationapp.toMilliseconds
+import com.johnqualls.reservationapp.core.data.Provider
+import com.johnqualls.reservationapp.core.data.ReservationDataSource
+import com.johnqualls.reservationapp.core.data.Schedule
+import com.johnqualls.reservationapp.core.to12HourFormat
+import com.johnqualls.reservationapp.core.toLocalDate
+import com.johnqualls.reservationapp.core.toMilliseconds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

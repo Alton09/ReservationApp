@@ -1,4 +1,4 @@
-package com.johnqualls.reservationapp
+package com.johnqualls.reservationapp.core
 
 import androidx.compose.ui.Modifier
 

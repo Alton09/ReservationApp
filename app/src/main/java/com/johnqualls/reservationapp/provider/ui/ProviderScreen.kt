@@ -1,4 +1,4 @@
-package com.johnqualls.reservationapp.ui
+package com.johnqualls.reservationapp.provider.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -33,8 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.johnqualls.reservationapp.R
-import com.johnqualls.reservationapp.data.Provider
-import com.johnqualls.reservationapp.ui.theme.ReservationAppTheme
+import com.johnqualls.reservationapp.core.data.Provider
+import com.johnqualls.reservationapp.core.ui.TimePickerDialog
+import com.johnqualls.reservationapp.core.ui.theme.ReservationAppTheme
 import java.time.LocalTime
 
 @Preview(showBackground = true)

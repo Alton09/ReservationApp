@@ -1,4 +1,4 @@
-package com.johnqualls.reservationapp
+package com.johnqualls.reservationapp.core
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

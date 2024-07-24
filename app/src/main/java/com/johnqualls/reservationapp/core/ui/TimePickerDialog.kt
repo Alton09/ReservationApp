@@ -1,4 +1,4 @@
-package com.johnqualls.reservationapp.ui
+package com.johnqualls.reservationapp.core.ui
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
