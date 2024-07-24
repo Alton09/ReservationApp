@@ -12,7 +12,10 @@ import com.johnqualls.reservationapp.provider.ui.ProviderScreen
 fun ReservationNavHost(navController: NavHostController, modifier: Modifier) {
     NavHost(navController = navController, startDestination = "HOME", modifier = modifier) {
         composable("HOME") {
-            HomeScreen { navController.navigate("PROVIDER") }
+            HomeScreen(
+                { navController.navigate("PROVIDER") },
+                { navController.navigate("CLIENT") }
+            )
         }
         composable("PROVIDER") {
             ProviderScreen()

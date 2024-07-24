@@ -47,21 +47,20 @@ private fun ProviderScreenPreview() {
 }
 
 @Composable
-fun ProviderScreen(modifier: Modifier = Modifier) {
+fun ProviderScreen() {
     val viewModel: ProviderViewModel = hiltViewModel()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    Content(modifier, uiState, viewModel::getSchedule, viewModel::addNewSchedule)
+    Content(uiState, viewModel::getSchedule, viewModel::addNewSchedule)
 }
 
 @Composable
 private fun Content(
-    modifier: Modifier,
     uiState: ProviderUiState,
     onDateClick: (Long) -> Unit,
     onAddNewSchedule: (Pair<LocalTime, LocalTime>) -> Unit
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {

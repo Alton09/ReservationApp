@@ -29,7 +29,7 @@ private fun HomeScreenPreview() {
 }
 
 @Composable
-fun HomeScreen(onProviderClick: () -> Unit = {}) {
+fun HomeScreen(onProviderClick: () -> Unit = {}, onClientClick: () -> Unit = {}) {
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -46,7 +46,7 @@ fun HomeScreen(onProviderClick: () -> Unit = {}) {
             Text(text = "Provider")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(modifier = Modifier.width(150.dp), onClick = { /*TODO*/ }) {
+        Button(modifier = Modifier.width(150.dp), onClick = onClientClick) {
             Text(text = "Client")
         }
     }
