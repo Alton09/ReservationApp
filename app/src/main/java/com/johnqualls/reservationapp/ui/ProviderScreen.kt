@@ -1,7 +1,9 @@
 package com.johnqualls.reservationapp.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,14 +12,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -103,37 +103,19 @@ private fun ScheduleShift(
     onAddNewSchedule: (Pair<LocalTime, LocalTime>) -> Unit
 ) {
     schedule?.let { schedule ->
-        CreatedSchedule()
+        ExistingSchedule(schedule.startTime.toString(), schedule.endTime.toString())
     } ?: run {
         NewSchedule(onAddNewSchedule)
     }
 }
 
 @Composable
-private fun CreatedSchedule() {
-    Column {
-        TextButton(
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.textButtonColors()
-                .copy(containerColor = MaterialTheme.colorScheme.primaryContainer)
-        ) {
-            Text(
-                text = "Start: 9:00 AM",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        }
-        TextButton(
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.textButtonColors()
-                .copy(containerColor = MaterialTheme.colorScheme.primaryContainer)
-        ) {
-            Text(
-                text = "End: 5:00 PM",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        }
+private fun ExistingSchedule(startTime: String, endTime: String) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        Text(
+            text = "$startTime - $endTime",
+            style = MaterialTheme.typography.headlineSmall,
+        )
     }
 }
 
