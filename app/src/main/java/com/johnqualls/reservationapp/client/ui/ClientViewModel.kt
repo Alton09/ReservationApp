@@ -1,6 +1,5 @@
 package com.johnqualls.reservationapp.client.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.johnqualls.reservationapp.core.data.Reservation
 import com.johnqualls.reservationapp.core.data.ReservationDataSource
@@ -43,10 +42,9 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
         reservationDataSource.getSchedule(provider.id, date.toLocalDate())?.let { schedule ->
             val reservations = reservationDataSource.getReservations(schedule.id)
             val timeSlots = mapReservedTimeSlots(schedule, reservations)
-            Log.d("JAQ", timeSlots.toString())
             _uiState.update {
                 it.copy(
-                    selectedScheduleSlots = timeSlots
+                    selectedScheduleTimeSlots = timeSlots
                 )
             }
         }

@@ -3,7 +3,7 @@ A healthcare app that allows clients to book reservations for health care provid
 
 ## Requirements
 - [x] Allows providers to submit times they’d like to work on the schedule.
-- [ ] Allows clients to list available slots.
+- [x] Allows clients to list available slots.
 - [ ] Allows clients to reserve an available slot.
     - [ ] Reservations expire after 30 mins if not confirmed.
     - [ ] Reservations must be made at least 24 hours in advance.

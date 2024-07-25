@@ -8,7 +8,7 @@ data class ClientUiState(
     val client: Client,
     val provider: Provider,
     val availableProviderDates: List<LocalDate>? = null,
-    val selectedScheduleSlots: List<TimeSlot>? = null
+    val selectedScheduleTimeSlots: List<TimeSlot>? = null
 )
 
 data class TimeSlot(
