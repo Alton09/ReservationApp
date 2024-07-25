@@ -20,6 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.johnqualls.reservationapp.core.data.Client
 import com.johnqualls.reservationapp.core.data.Provider
 import com.johnqualls.reservationapp.core.toLocalDate
+import com.johnqualls.reservationapp.core.toMilliseconds
 import java.time.LocalDate
 
 @Composable
@@ -33,15 +34,12 @@ fun ClientScreen() {
 private fun Content(uiState: ClientUiState, onDateClick: (Long) -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         ClientDetails(uiState.client)
-
-        uiState.availableProviderDates?.let { availableProviderDates ->
-            ProviderSchedule(
-                provider = uiState.provider,
-                selectedDate = uiState.selectedDate,
-                availableProviderDates = availableProviderDates,
-                onDateClick = onDateClick
-            )
-        }
+        ProviderSchedule(
+            provider = uiState.provider,
+            selectedDate = uiState.selectedDate,
+            availableProviderDates = uiState.availableProviderDates,
+            onDateClick = onDateClick
+        )
     }
 }
 
@@ -59,24 +57,26 @@ private fun ClientDetails(client: Client) {
 private fun ProviderSchedule(
     provider: Provider,
     selectedDate: Long,
-    availableProviderDates: List<LocalDate>,
+    availableProviderDates: List<LocalDate>?,
     onDateClick: (Long) -> Unit
 ) {
-    Spacer(modifier = Modifier.height(12.dp))
-    Text(text = "Provider Schedule", style = MaterialTheme.typography.headlineSmall)
-    Text(text = provider.name, style = MaterialTheme.typography.titleMedium)
-    // TOOO move date picker to reusable composable
-    Spacer(modifier = Modifier.height(8.dp))
-    val dateState = rememberDatePickerState(
-        initialSelectedDateMillis = selectedDate,
-        yearRange = IntRange(2024, 2025),
-        initialDisplayMode = DisplayMode.Picker,
-        selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return availableProviderDates.contains(utcTimeMillis.toLocalDate())
+    availableProviderDates?.let {
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = "Provider Schedule", style = MaterialTheme.typography.headlineSmall)
+        Text(text = provider.name, style = MaterialTheme.typography.titleMedium)
+        // TOOO move date picker to reusable composable
+        Spacer(modifier = Modifier.height(8.dp))
+        val dateState = rememberDatePickerState(
+            initialSelectedDateMillis = availableProviderDates.first().toMilliseconds(),
+            yearRange = IntRange(2024, 2025),
+            initialDisplayMode = DisplayMode.Picker,
+            selectableDates = object : SelectableDates {
+                override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                    return availableProviderDates.contains(utcTimeMillis.toLocalDate())
+                }
             }
-        }
-    )
-    dateState.selectedDateMillis?.let { onDateClick(it) }
-    DatePicker(state = dateState, title = null)
+        )
+        dateState.selectedDateMillis?.let { onDateClick(it) }
+        DatePicker(state = dateState, title = null)
+    }
 }
