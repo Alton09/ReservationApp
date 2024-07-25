@@ -88,7 +88,6 @@ private fun ScheduleCalendar(uiState: ProviderUiState, onDateClick: (Long) -> Un
     Spacer(modifier = Modifier.height(8.dp))
     val dateState = rememberDatePickerState(
         initialSelectedDateMillis = uiState.selectedDate,
-        selectableDates = DatePickerDefaults.AllDates,
         yearRange = IntRange(2024, 2025),
         initialDisplayMode = DisplayMode.Picker
     )

@@ -2,6 +2,7 @@ package com.johnqualls.reservationapp.client.ui
 
 import androidx.lifecycle.ViewModel
 import com.johnqualls.reservationapp.core.data.ReservationDataSource
+import com.johnqualls.reservationapp.core.toLocalDate
 import com.johnqualls.reservationapp.core.toMilliseconds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,12 +25,22 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
 
 
     init {
-        getProviderSchedule()
+        getProviderSchedules()
     }
 
-    private fun getProviderSchedule() {
+    private fun getProviderSchedules() {
         val availableProviderDates =
-            reservationDataSource.getSchedules(provider.id).map { it.date.toMilliseconds() }
+            reservationDataSource.getSchedules(provider.id)
+                .map { it.date.toMilliseconds().toLocalDate() }
         _uiState.update { it.copy(availableProviderDates = availableProviderDates) }
+    }
+
+    fun getSchedule(date: Long) {
+        val schedule = reservationDataSource.getSchedule(provider.id, date.toLocalDate())
+        _uiState.update {
+            it.copy(
+                selectedDate = date,
+            )
+        }
     }
 }
