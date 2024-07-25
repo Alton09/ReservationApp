@@ -3,7 +3,6 @@ package com.johnqualls.reservationapp.provider.ui
 import androidx.lifecycle.ViewModel
 import com.johnqualls.reservationapp.core.data.Provider
 import com.johnqualls.reservationapp.core.data.ReservationDataSource
-import com.johnqualls.reservationapp.core.data.Schedule
 import com.johnqualls.reservationapp.core.to12HourFormat
 import com.johnqualls.reservationapp.core.toLocalDate
 import com.johnqualls.reservationapp.core.toMilliseconds
@@ -41,13 +40,12 @@ class ProviderViewModel @Inject constructor(private val reservationDataSource: R
     }
 
     fun addNewSchedule(scheduleTimes: Pair<LocalTime, LocalTime>) {
-        val newSchedule = Schedule(
+        val newSchedule = reservationDataSource.createSchedule(
             providerId = provider.id,
             date = uiState.value.selectedDate.toLocalDate(),
             startTime = scheduleTimes.first,
-            endTime = scheduleTimes.second
+            endTime = scheduleTimes.second,
         )
-        reservationDataSource.createSchedule(newSchedule)
         _uiState.update {
             it.copy(
                 scheduleStartTime = newSchedule.startTime.to12HourFormat(),

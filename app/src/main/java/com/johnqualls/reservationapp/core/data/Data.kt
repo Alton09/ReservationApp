@@ -23,7 +23,8 @@ data class Schedule(
     val providerId: String,
     val date: LocalDate,
     val startTime: LocalTime,
-    val endTime: LocalTime
+    val endTime: LocalTime,
+    val timeSlots: List<LocalTime>
 )
 
 data class Reservation(

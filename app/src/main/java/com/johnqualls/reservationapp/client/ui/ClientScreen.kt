@@ -36,7 +36,6 @@ private fun Content(uiState: ClientUiState, onDateClick: (Long) -> Unit) {
         ClientDetails(uiState.client)
         ProviderSchedule(
             provider = uiState.provider,
-            selectedDate = uiState.selectedDate,
             availableProviderDates = uiState.availableProviderDates,
             onDateClick = onDateClick
         )
@@ -56,7 +55,6 @@ private fun ClientDetails(client: Client) {
 @Composable
 private fun ProviderSchedule(
     provider: Provider,
-    selectedDate: Long,
     availableProviderDates: List<LocalDate>?,
     onDateClick: (Long) -> Unit
 ) {

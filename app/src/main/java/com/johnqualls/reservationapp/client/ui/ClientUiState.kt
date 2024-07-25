@@ -7,12 +7,11 @@ import java.time.LocalDate
 data class ClientUiState(
     val client: Client,
     val provider: Provider,
-    val selectedDate: Long = System.currentTimeMillis(),
     val availableProviderDates: List<LocalDate>? = null,
     val selectedScheduleSlots: List<TimeSlot>? = null
 )
 
 data class TimeSlot(
     val startTime: String,
-    val isAvailable: Boolean
+    val isReserved: Boolean
 )

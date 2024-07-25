@@ -1,6 +1,7 @@
 package com.johnqualls.reservationapp.core.data
 
 import java.time.LocalDate
+import java.time.LocalTime
 
 interface ReservationDataSource {
 
@@ -14,5 +15,10 @@ interface ReservationDataSource {
 
     fun getReservations(scheduleId: String): List<Reservation>
 
-    fun createSchedule(schedule: Schedule)
+    fun createSchedule(
+        providerId: String,
+        date: LocalDate,
+        startTime: LocalTime,
+        endTime: LocalTime
+    ): Schedule
 }

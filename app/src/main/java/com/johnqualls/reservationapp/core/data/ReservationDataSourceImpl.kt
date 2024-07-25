@@ -43,32 +43,34 @@ class ReservationDataSourceImpl : ReservationDataSource {
         )
     )
 
-    private val schedules = mutableListOf(
-        Schedule(
+    private val schedules = mutableListOf<Schedule>()
+
+    init {
+        createSchedule(
             providerId = providers[0].id,
             date = LocalDate.of(2024, 7, 22),
             startTime = LocalTime.of(8, 0),
             endTime = LocalTime.of(9, 0)
-        ),
-        Schedule(
+        )
+        createSchedule(
             providerId = providers[0].id,
             date = LocalDate.of(2024, 7, 23),
             startTime = LocalTime.of(10, 0),
             endTime = LocalTime.of(11, 0)
-        ),
-        Schedule(
+        )
+        createSchedule(
             providerId = providers[1].id,
             date = LocalDate.of(2024, 7, 18),
             startTime = LocalTime.of(9, 0),
             endTime = LocalTime.of(10, 0)
-        ),
-        Schedule(
+        )
+        createSchedule(
             providerId = providers[2].id,
             date = LocalDate.of(2024, 7, 19),
             startTime = LocalTime.of(14, 0),
             endTime = LocalTime.of(15, 0)
         )
-    )
+    }
 
     private val reservations = mutableListOf(
         Reservation(
@@ -114,9 +116,33 @@ class ReservationDataSourceImpl : ReservationDataSource {
         return reservations.filter { it.scheduleId == scheduleId }
     }
 
-    override fun createSchedule(schedule: Schedule) {
+    override fun createSchedule(
+        providerId: String,
+        date: LocalDate,
+        startTime: LocalTime,
+        endTime: LocalTime
+    ): Schedule {
+        val schedule = Schedule(
+            providerId = providerId,
+            date = date,
+            startTime = startTime,
+            endTime = endTime,
+            timeSlots = generate15MinSlots(startTime, endTime)
+        )
         schedules.add(
             schedule
         )
+        return schedule
+    }
+
+    private fun generate15MinSlots(startTime: LocalTime, endTime: LocalTime): List<LocalTime> {
+        val timeSlots = mutableListOf<LocalTime>()
+        var currentTime = startTime
+
+        while (currentTime.isBefore(endTime)) {
+            timeSlots.add(currentTime)
+            currentTime = currentTime.plusMinutes(15)
+        }
+        return timeSlots
     }
 }
