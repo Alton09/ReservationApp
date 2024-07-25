@@ -9,4 +9,10 @@ data class ClientUiState(
     val provider: Provider,
     val selectedDate: Long = System.currentTimeMillis(),
     val availableProviderDates: List<LocalDate>? = null,
+    val selectedScheduleSlots: List<TimeSlot>? = null
+)
+
+data class TimeSlot(
+    val startTime: String,
+    val isAvailable: Boolean
 )

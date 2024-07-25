@@ -12,7 +12,7 @@ interface ReservationDataSource {
 
     fun getSchedule(providerId: String, localDate: LocalDate): Schedule?
 
-    fun getReservations(): List<Reservation>
+    fun getReservations(scheduleId: String): List<Reservation>
 
     fun createSchedule(schedule: Schedule)
 }

@@ -1,5 +1,6 @@
 package com.johnqualls.reservationapp.core.data
 
+import com.johnqualls.reservationapp.core.data.ReservationStatus.CONFIRMED
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -74,22 +75,22 @@ class ReservationDataSourceImpl : ReservationDataSource {
             clientId = clients[0].id,
             providerId = providers[0].id,
             scheduleId = schedules[0].id,
-            status = "confirmed",
-            timeSlot = "08:00-09:00"
+            status = CONFIRMED,
+            timeSlot = LocalTime.of(8, 0)
         ),
         Reservation(
             clientId = clients[1].id,
             providerId = providers[1].id,
             scheduleId = schedules[2].id,
-            status = "pending",
-            timeSlot = "09:00-10:00"
+            status = CONFIRMED,
+            timeSlot = LocalTime.of(9, 30)
         ),
         Reservation(
             clientId = clients[2].id,
             providerId = providers[2].id,
             scheduleId = schedules[3].id,
-            status = "canceled",
-            timeSlot = "14:00-15:00"
+            status = CONFIRMED,
+            timeSlot = LocalTime.of(14, 15)
         )
     )
 
@@ -109,8 +110,8 @@ class ReservationDataSourceImpl : ReservationDataSource {
         return schedules.find { it.providerId == providerId && it.date == localDate }
     }
 
-    override fun getReservations(): List<Reservation> {
-        return reservations
+    override fun getReservations(scheduleId: String): List<Reservation> {
+        return reservations.filter { it.scheduleId == scheduleId }
     }
 
     override fun createSchedule(schedule: Schedule) {

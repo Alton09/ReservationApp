@@ -31,7 +31,12 @@ data class Reservation(
     val clientId: String,
     val providerId: String,
     val scheduleId: String,
-    val status: String, // e.g., "pending", "confirmed", "canceled"
-    val timeSlot: String
+    val status: ReservationStatus,
+    val timeSlot: LocalTime
 )
+
+enum class ReservationStatus {
+    PENDING,
+    CONFIRMED
+}
 
