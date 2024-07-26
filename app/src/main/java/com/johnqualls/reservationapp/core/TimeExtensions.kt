@@ -6,6 +6,8 @@ import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
+private val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+
 fun LocalDate.toMilliseconds(): Long {
     return atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
 }
@@ -15,13 +17,11 @@ fun Long.toLocalDate(): LocalDate {
 }
 
 fun LocalTime.to12HourFormat(): String {
-    val formatter = DateTimeFormatter.ofPattern("hh:mm a")
     return format(formatter)
 }
 
 fun String.toLocalTime(): LocalTime? {
     return try {
-        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
         LocalTime.parse(this, formatter)
     } catch (e: Exception) {
         null
