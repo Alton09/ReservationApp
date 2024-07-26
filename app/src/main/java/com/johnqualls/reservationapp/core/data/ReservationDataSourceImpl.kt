@@ -135,6 +135,24 @@ class ReservationDataSourceImpl : ReservationDataSource {
         return schedule
     }
 
+    override fun createReservation(
+        clientId: String,
+        providerId: String,
+        scheduleId: String,
+        status: ReservationStatus,
+        timeSlot: LocalTime
+    ): Reservation {
+        val reservation = Reservation(
+            clientId = clientId,
+            providerId = providerId,
+            scheduleId = scheduleId,
+            status = status,
+            timeSlot = timeSlot
+        )
+        reservations.add(reservation)
+        return reservation
+    }
+
     private fun generate15MinSlots(startTime: LocalTime, endTime: LocalTime): List<LocalTime> {
         val timeSlots = mutableListOf<LocalTime>()
         var currentTime = startTime

@@ -18,3 +18,12 @@ fun LocalTime.to12HourFormat(): String {
     val formatter = DateTimeFormatter.ofPattern("hh:mm a")
     return format(formatter)
 }
+
+fun String.toLocalTime(): LocalTime? {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+        LocalTime.parse(this, formatter)
+    } catch (e: Exception) {
+        null
+    }
+}

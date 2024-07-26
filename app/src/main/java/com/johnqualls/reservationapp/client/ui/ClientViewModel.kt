@@ -1,11 +1,14 @@
 package com.johnqualls.reservationapp.client.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.johnqualls.reservationapp.core.data.Reservation
 import com.johnqualls.reservationapp.core.data.ReservationDataSource
+import com.johnqualls.reservationapp.core.data.ReservationStatus
 import com.johnqualls.reservationapp.core.data.Schedule
 import com.johnqualls.reservationapp.core.to12HourFormat
 import com.johnqualls.reservationapp.core.toLocalDate
+import com.johnqualls.reservationapp.core.toLocalTime
 import com.johnqualls.reservationapp.core.toMilliseconds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ClientViewModel @Inject constructor(private val reservationDataSource: ReservationDataSource) :
     ViewModel() {
+
     // TODO Allow user to select client
     private val client = reservationDataSource.getClients().first()
 
@@ -25,6 +29,8 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
 
     private val _uiState = MutableStateFlow(ClientUiState(client = client, provider = provider))
     val uiState: StateFlow<ClientUiState> = _uiState.asStateFlow()
+
+    private var selectedScheduleId: String? = null
 
 
     init {
@@ -40,6 +46,7 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
 
     fun getSchedule(date: Long) {
         reservationDataSource.getSchedule(provider.id, date.toLocalDate())?.let { schedule ->
+            selectedScheduleId = schedule.id
             val reservations = reservationDataSource.getReservations(schedule.id)
             val timeSlots = mapReservedTimeSlots(schedule, reservations)
             _uiState.update {
@@ -59,5 +66,25 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
             isReserved = reservations.any { it.timeSlot == timeSlot }
             TimeSlot(timeSlot.to12HourFormat(), isReserved)
         }
+    }
+
+    fun reserve(timeSlot: TimeSlot, reservationStatus: ReservationStatus) {
+        selectedScheduleId?.let { scheduleId ->
+            timeSlot.startTime.toLocalTime()?.let { time ->
+                val reservation = reservationDataSource.createReservation(
+                    client.id,
+                    provider.id,
+                    scheduleId,
+                    reservationStatus,
+                    time
+                )
+
+                Log.d("JAQ", "Reservation created: $reservation")
+            }
+        }
+    }
+
+    fun confirmReservation(timeSlot: TimeSlot) {
+        reserve(timeSlot, ReservationStatus.CONFIRMED)
     }
 }

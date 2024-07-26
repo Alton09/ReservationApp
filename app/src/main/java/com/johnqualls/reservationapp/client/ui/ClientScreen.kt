@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.johnqualls.reservationapp.core.data.Client
 import com.johnqualls.reservationapp.core.data.Provider
+import com.johnqualls.reservationapp.core.data.ReservationStatus
 import com.johnqualls.reservationapp.core.toLocalDate
 import com.johnqualls.reservationapp.core.toMilliseconds
 import java.time.LocalDate
@@ -40,11 +41,20 @@ import java.time.LocalDate
 fun ClientScreen() {
     val viewModel: ClientViewModel = hiltViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    Content(state, viewModel::getSchedule)
+    Content(
+        state,
+        viewModel::getSchedule,
+        { viewModel.reserve(it, ReservationStatus.PENDING) },
+        viewModel::confirmReservation
+    )
 }
 
 @Composable
-private fun Content(uiState: ClientUiState, onDateClick: (Long) -> Unit) {
+private fun Content(
+    uiState: ClientUiState, onDateClick: (Long) -> Unit,
+    onReserve: (TimeSlot) -> Unit,
+    onConfirm: (TimeSlot) -> Unit
+) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         ClientDetails(uiState.client)
         ProviderSchedule(
@@ -52,7 +62,7 @@ private fun Content(uiState: ClientUiState, onDateClick: (Long) -> Unit) {
             availableProviderDates = uiState.availableProviderDates,
             onDateClick = onDateClick
         )
-        ProviderScheduleTimeSlots(uiState.selectedScheduleTimeSlots)
+        Reservations(uiState.selectedScheduleTimeSlots, onReserve, onConfirm)
     }
 }
 
@@ -94,16 +104,24 @@ private fun ProviderSchedule(
 }
 
 @Composable
-private fun ProviderScheduleTimeSlots(timeSlots: List<TimeSlot>?) {
+private fun Reservations(
+    timeSlots: List<TimeSlot>?,
+    onReserve: (TimeSlot) -> Unit,
+    onConfirm: (TimeSlot) -> Unit
+) {
     timeSlots?.let {
         // TODO Move dialog state management to viewmodel
         var shouldShowReservationDialog by remember { mutableStateOf(false) }
+        var selectedTimeSlot: TimeSlot? by remember { mutableStateOf(null) }
         LazyRow {
             timeSlots.forEach { timeSlot ->
                 item {
                     Button(
                         modifier = Modifier.size(100.dp),
-                        onClick = { shouldShowReservationDialog = true },
+                        onClick = {
+                            shouldShowReservationDialog = true
+                            selectedTimeSlot = timeSlot
+                        },
                         enabled = !timeSlot.isReserved,
                         shape = RoundedCornerShape(16.dp)
                     ) {
@@ -119,8 +137,14 @@ private fun ProviderScheduleTimeSlots(timeSlots: List<TimeSlot>?) {
                 }
             }
         }
-        if (shouldShowReservationDialog) {
-            ReservationDialog({ shouldShowReservationDialog = false }, {/*TODO*/ })
+        if (shouldShowReservationDialog && selectedTimeSlot != null) {
+            ReservationDialog({
+                shouldShowReservationDialog = false
+                onReserve(selectedTimeSlot!!)
+            }, {
+                shouldShowReservationDialog = false
+                onConfirm(selectedTimeSlot!!)
+            })
         }
     }
 }

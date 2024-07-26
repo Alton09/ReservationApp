@@ -21,4 +21,12 @@ interface ReservationDataSource {
         startTime: LocalTime,
         endTime: LocalTime
     ): Schedule
+
+    fun createReservation(
+        clientId: String,
+        providerId: String,
+        scheduleId: String,
+        status: ReservationStatus,
+        timeSlot: LocalTime
+    ): Reservation
 }
