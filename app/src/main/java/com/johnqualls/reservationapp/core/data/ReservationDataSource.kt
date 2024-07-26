@@ -28,5 +28,5 @@ interface ReservationDataSource {
         scheduleId: String,
         status: ReservationStatus,
         timeSlot: LocalTime
-    ): Reservation
+    )
 }

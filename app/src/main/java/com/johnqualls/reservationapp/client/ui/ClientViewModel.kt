@@ -1,6 +1,5 @@
 package com.johnqualls.reservationapp.client.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.johnqualls.reservationapp.core.data.Reservation
 import com.johnqualls.reservationapp.core.data.ReservationDataSource
@@ -61,25 +60,29 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
         schedule: Schedule,
         reservations: List<Reservation>
     ): List<TimeSlot> {
-        var isReserved: Boolean
+        var reservation: Reservation?
         return schedule.timeSlots.map { timeSlot ->
-            isReserved = reservations.any { it.timeSlot == timeSlot }
-            TimeSlot(timeSlot.to12HourFormat(), isReserved)
+            reservation = reservations.find { it.timeSlot == timeSlot }
+            TimeSlot(
+                timeSlot.to12HourFormat(),
+                isReservationLocked(reservation),
+            )
         }
     }
+
+    private fun isReservationLocked(reservation: Reservation?) =
+        reservation?.status == ReservationStatus.CONFIRMED || (reservation?.status == ReservationStatus.RESERVED && reservation.clientId != client.id)
 
     fun reserve(timeSlot: TimeSlot, reservationStatus: ReservationStatus) {
         selectedScheduleId?.let { scheduleId ->
             timeSlot.startTime.toLocalTime()?.let { time ->
-                val reservation = reservationDataSource.createReservation(
+                reservationDataSource.createReservation(
                     client.id,
                     provider.id,
                     scheduleId,
                     reservationStatus,
                     time
                 )
-
-                Log.d("JAQ", "Reservation created: $reservation")
             }
         }
     }

@@ -37,7 +37,7 @@ data class Reservation(
 )
 
 enum class ReservationStatus {
-    PENDING,
+    RESERVED,
     CONFIRMED
 }
 

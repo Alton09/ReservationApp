@@ -44,7 +44,7 @@ fun ClientScreen() {
     Content(
         state,
         viewModel::getSchedule,
-        { viewModel.reserve(it, ReservationStatus.PENDING) },
+        { viewModel.reserve(it, ReservationStatus.RESERVED) },
         viewModel::confirmReservation
     )
 }
@@ -116,21 +116,23 @@ private fun Reservations(
         LazyRow {
             timeSlots.forEach { timeSlot ->
                 item {
-                    Button(
-                        modifier = Modifier.size(100.dp),
-                        onClick = {
-                            shouldShowReservationDialog = true
-                            selectedTimeSlot = timeSlot
-                        },
-                        enabled = !timeSlot.isReserved,
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                    Column {
+                        Button(
+                            modifier = Modifier.size(100.dp),
+                            onClick = {
+                                shouldShowReservationDialog = true
+                                selectedTimeSlot = timeSlot
+                            },
+                            enabled = !timeSlot.isDisabled,
+                            shape = RoundedCornerShape(16.dp)
                         ) {
-                            Text(text = timeSlot.startTime)
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(text = timeSlot.startTime)
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.width(16.dp))

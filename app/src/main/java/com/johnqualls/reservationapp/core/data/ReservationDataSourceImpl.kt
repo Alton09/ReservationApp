@@ -141,7 +141,7 @@ class ReservationDataSourceImpl : ReservationDataSource {
         scheduleId: String,
         status: ReservationStatus,
         timeSlot: LocalTime
-    ): Reservation {
+    ) {
         val reservation = Reservation(
             clientId = clientId,
             providerId = providerId,
@@ -150,7 +150,6 @@ class ReservationDataSourceImpl : ReservationDataSource {
             timeSlot = timeSlot
         )
         reservations.add(reservation)
-        return reservation
     }
 
     private fun generate15MinSlots(startTime: LocalTime, endTime: LocalTime): List<LocalTime> {

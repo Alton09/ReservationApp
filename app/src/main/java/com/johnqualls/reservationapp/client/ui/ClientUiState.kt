@@ -13,5 +13,5 @@ data class ClientUiState(
 
 data class TimeSlot(
     val startTime: String,
-    val isReserved: Boolean
+    val isDisabled: Boolean
 )
