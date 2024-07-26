@@ -123,7 +123,7 @@ private fun NewSchedule(onAddNewSchedule: (Pair<LocalTime, LocalTime>) -> Unit) 
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // TOOO move ui state to view model
+        // TODO move ui state to view model
         var shouldShowDatePicker by remember { mutableStateOf(false) }
         if (shouldShowDatePicker) {
             ScheduleTimePicker(
@@ -144,7 +144,7 @@ private fun NewSchedule(onAddNewSchedule: (Pair<LocalTime, LocalTime>) -> Unit) 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleTimePicker(onConfirm: (Pair<LocalTime, LocalTime>) -> Unit, onDismiss: () -> Unit) {
-    // TOOO move ui state to view model
+    // TODO move ui state to view model
     var shouldShowFirstPicker by remember { mutableStateOf(true) }
     var startDate: LocalTime? by remember { mutableStateOf(null) }
     var endDate: LocalTime? by remember { mutableStateOf(null) }

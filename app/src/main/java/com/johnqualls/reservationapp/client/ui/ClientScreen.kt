@@ -110,7 +110,7 @@ private fun ProviderSchedule(
         Spacer(modifier = Modifier.height(12.dp))
         Text(text = "Provider Schedule", style = MaterialTheme.typography.headlineSmall)
         Text(text = provider.name, style = MaterialTheme.typography.titleMedium)
-        // TOOO move date picker to reusable composable
+        // TODO move date picker to reusable composable
         Spacer(modifier = Modifier.height(8.dp))
         val dateState = rememberDatePickerState(
             initialSelectedDateMillis = availableProviderDates.first().toMilliseconds(),
