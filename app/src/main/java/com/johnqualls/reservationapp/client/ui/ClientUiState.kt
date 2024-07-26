@@ -8,7 +8,9 @@ data class ClientUiState(
     val client: Client,
     val provider: Provider,
     val availableProviderDates: List<LocalDate>? = null,
-    val selectedScheduleTimeSlots: List<TimeSlot>? = null
+    val selectedScheduleTimeSlots: List<TimeSlot>? = null,
+    val showReservationTooSoonError: Boolean = false,
+    val showReservationDialog: Boolean = false
 )
 
 data class TimeSlot(

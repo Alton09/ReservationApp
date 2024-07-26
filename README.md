@@ -6,7 +6,7 @@ A healthcare app that allows clients to book reservations for health care provid
 - [x] Allows clients to list available slots.
 - [ ] Allows clients to reserve an available slot.
     - [ ] Reservations expire after 30 mins if not confirmed.
-    - [ ] Reservations must be made at least 24 hours in advance.
+    - [x] Reservations must be made at least 24 hours in advance.
 - [x] Allows clients to confirm their reservation.
 
 ## Entity Relationship Diagram

@@ -48,25 +48,25 @@ class ReservationDataSourceImpl : ReservationDataSource {
     init {
         createSchedule(
             providerId = providers[0].id,
-            date = LocalDate.of(2024, 7, 22),
+            date = LocalDate.of(2024, 7, 30),
             startTime = LocalTime.of(8, 0),
             endTime = LocalTime.of(9, 0)
         )
         createSchedule(
             providerId = providers[0].id,
-            date = LocalDate.of(2024, 7, 23),
+            date = LocalDate.of(2024, 7, 31),
             startTime = LocalTime.of(10, 0),
             endTime = LocalTime.of(11, 0)
         )
         createSchedule(
             providerId = providers[1].id,
-            date = LocalDate.of(2024, 7, 18),
+            date = LocalDate.of(2024, 8, 1),
             startTime = LocalTime.of(9, 0),
             endTime = LocalTime.of(10, 0)
         )
         createSchedule(
             providerId = providers[2].id,
-            date = LocalDate.of(2024, 7, 19),
+            date = LocalDate.of(2024, 8, 3),
             startTime = LocalTime.of(14, 0),
             endTime = LocalTime.of(15, 0)
         )
@@ -156,6 +156,8 @@ class ReservationDataSourceImpl : ReservationDataSource {
         } else {
             reservations.add(reservation)
         }
+
+//        Log.d("JAQ", "Reservations: $reservations")
     }
 
     private fun generate15MinSlots(startTime: LocalTime, endTime: LocalTime): List<LocalTime> {

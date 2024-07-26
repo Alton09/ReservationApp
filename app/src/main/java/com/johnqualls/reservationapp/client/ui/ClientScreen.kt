@@ -22,9 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -42,18 +39,23 @@ fun ClientScreen() {
     val viewModel: ClientViewModel = hiltViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     Content(
-        state,
-        { viewModel.getSchedule(it.toLocalDate()) },
-        { viewModel.reserve(it, ReservationStatus.RESERVED) },
-        viewModel::confirmReservation
+        uiState = state,
+        onDateClick = { viewModel.getSchedule(it.toLocalDate()) },
+        onTimeSlotClick = { viewModel.reserve(it, ReservationStatus.RESERVED) },
+        onConfirmReservation = viewModel::confirmReservation,
+        onDismissReservationDialog = viewModel::dismissReservationDialog,
+        onDismissErrorDialog = viewModel::dismissErrorDialog
     )
 }
 
 @Composable
 private fun Content(
-    uiState: ClientUiState, onDateClick: (Long) -> Unit,
-    onReserve: (TimeSlot) -> Unit,
-    onConfirm: (TimeSlot) -> Unit
+    uiState: ClientUiState,
+    onDateClick: (Long) -> Unit,
+    onTimeSlotClick: (TimeSlot) -> Unit,
+    onConfirmReservation: () -> Unit,
+    onDismissReservationDialog: () -> Unit,
+    onDismissErrorDialog: () -> Unit,
 ) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         ClientDetails(uiState.client)
@@ -62,8 +64,30 @@ private fun Content(
             availableProviderDates = uiState.availableProviderDates,
             onDateClick = onDateClick
         )
-        Reservations(uiState.selectedScheduleTimeSlots, onReserve, onConfirm)
+        Reservations(uiState.selectedScheduleTimeSlots, onTimeSlotClick)
     }
+
+    // Dialogs
+    if (uiState.showReservationTooSoonError) {
+        ReservationTooSoonDialog(onDismissErrorDialog)
+    }
+
+    if (uiState.showReservationDialog) {
+        ReservationDialog(onDismissReservationDialog, onConfirmReservation)
+    }
+}
+
+@Composable
+private fun ReservationTooSoonDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        title = { Text(text = "Cannot Reserve") },
+        text = { Text(text = "Reservation cannot be within 24 hours.") },
+        dismissButton = {
+            Text(modifier = Modifier.clickable { onDismiss() }, text = "Dismiss")
+        },
+        confirmButton = {},
+        onDismissRequest = onDismiss,
+    )
 }
 
 @Composable
@@ -106,23 +130,16 @@ private fun ProviderSchedule(
 @Composable
 private fun Reservations(
     timeSlots: List<TimeSlot>?,
-    onReserve: (TimeSlot) -> Unit,
-    onConfirm: (TimeSlot) -> Unit
+    onTimeSlotClick: (TimeSlot) -> Unit,
 ) {
     timeSlots?.let {
-        // TODO Move dialog state management to viewmodel
-        var shouldShowReservationDialog by remember { mutableStateOf(false) }
-        var selectedTimeSlot: TimeSlot? by remember { mutableStateOf(null) }
         LazyRow {
             timeSlots.forEach { timeSlot ->
                 item {
                     Column {
                         Button(
                             modifier = Modifier.size(100.dp),
-                            onClick = {
-                                shouldShowReservationDialog = true
-                                selectedTimeSlot = timeSlot
-                            },
+                            onClick = { onTimeSlotClick(timeSlot) },
                             enabled = !timeSlot.isDisabled,
                             shape = RoundedCornerShape(16.dp)
                         ) {
@@ -139,22 +156,13 @@ private fun Reservations(
                 }
             }
         }
-        if (shouldShowReservationDialog && selectedTimeSlot != null) {
-            ReservationDialog({
-                shouldShowReservationDialog = false
-                onReserve(selectedTimeSlot!!)
-            }, {
-                shouldShowReservationDialog = false
-                onConfirm(selectedTimeSlot!!)
-            })
-        }
     }
 }
 
 @Composable
 private fun ReservationDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
     AlertDialog(
-        title = { Text(text = "Reservation") },
+        title = { Text(text = "Reserved") },
         text = { Text(text = "This appointment has been reserved and will expire in thirty minutes. Would you like to confirm to book the appointment?") },
         dismissButton = {
             Text(modifier = Modifier.clickable { onDismiss() }, text = "Dismiss")
