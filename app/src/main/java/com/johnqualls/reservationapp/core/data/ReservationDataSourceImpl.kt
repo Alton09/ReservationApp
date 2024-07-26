@@ -1,5 +1,6 @@
 package com.johnqualls.reservationapp.core.data
 
+import android.util.Log
 import com.johnqualls.reservationapp.core.data.ReservationStatus.CONFIRMED
 import java.time.LocalDate
 import java.time.LocalTime
@@ -149,7 +150,14 @@ class ReservationDataSourceImpl : ReservationDataSource {
             status = status,
             timeSlot = timeSlot
         )
-        reservations.add(reservation)
+
+        val existingReservationIndex = reservations.indexOf(reservation)
+        if (existingReservationIndex != -1) {
+            reservations[existingReservationIndex] = reservation
+        } else {
+            reservations.add(reservation)
+        }
+        Log.d("JAQ", "Reservations: $reservations")
     }
 
     private fun generate15MinSlots(startTime: LocalTime, endTime: LocalTime): List<LocalTime> {

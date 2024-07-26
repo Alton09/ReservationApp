@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.johnqualls.reservationapp.core.data.Reservation
 import com.johnqualls.reservationapp.core.data.ReservationDataSource
 import com.johnqualls.reservationapp.core.data.ReservationStatus
+import com.johnqualls.reservationapp.core.data.ReservationStatus.CONFIRMED
+import com.johnqualls.reservationapp.core.data.ReservationStatus.RESERVED
 import com.johnqualls.reservationapp.core.data.Schedule
 import com.johnqualls.reservationapp.core.to12HourFormat
 import com.johnqualls.reservationapp.core.toLocalDate
@@ -71,9 +73,13 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
     }
 
     private fun isReservationLocked(reservation: Reservation?) =
-        reservation?.status == ReservationStatus.CONFIRMED || (reservation?.status == ReservationStatus.RESERVED && reservation.clientId != client.id)
+        reservation?.status == CONFIRMED || (reservation?.status == RESERVED && reservation.clientId != client.id)
 
     fun reserve(timeSlot: TimeSlot, reservationStatus: ReservationStatus) {
+        val ignoreReservation = ignoreIfAlreadyReserved(timeSlot, reservationStatus)
+        if (ignoreReservation) return
+
+        // Create reservation
         selectedScheduleId?.let { scheduleId ->
             timeSlot.startTime.toLocalTime()?.let { time ->
                 reservationDataSource.createReservation(
@@ -88,6 +94,21 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
     }
 
     fun confirmReservation(timeSlot: TimeSlot) {
-        reserve(timeSlot, ReservationStatus.CONFIRMED)
+        reserve(timeSlot, CONFIRMED)
+    }
+
+    private fun ignoreIfAlreadyReserved(
+        timeSlot: TimeSlot,
+        reservationStatus: ReservationStatus
+    ): Boolean {
+        val localTimeSlot = timeSlot.startTime.toLocalTime()
+        val reservations = reservationDataSource.getReservations(selectedScheduleId!!)
+        val existingReservation = reservations.find { it.timeSlot == localTimeSlot }
+        if (existingReservation != null) {
+            if (existingReservation.status == RESERVED && reservationStatus == RESERVED) {
+                return true
+            }
+        }
+        return false
     }
 }
