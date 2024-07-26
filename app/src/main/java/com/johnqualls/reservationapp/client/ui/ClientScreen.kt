@@ -43,7 +43,7 @@ fun ClientScreen() {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     Content(
         state,
-        viewModel::getSchedule,
+        { viewModel.getSchedule(it.toLocalDate()) },
         { viewModel.reserve(it, ReservationStatus.RESERVED) },
         viewModel::confirmReservation
     )

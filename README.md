@@ -7,7 +7,7 @@ A healthcare app that allows clients to book reservations for health care provid
 - [ ] Allows clients to reserve an available slot.
     - [ ] Reservations expire after 30 mins if not confirmed.
     - [ ] Reservations must be made at least 24 hours in advance.
-- [ ] Allows clients to confirm their reservation.
+- [x] Allows clients to confirm their reservation.
 
 ## Entity Relationship Diagram
 ```mermaid

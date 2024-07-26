@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,23 +32,16 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
     private val _uiState = MutableStateFlow(ClientUiState(client = client, provider = provider))
     val uiState: StateFlow<ClientUiState> = _uiState.asStateFlow()
 
-    private var selectedScheduleId: String? = null
+    private var selectedSchedule: Schedule? = null
 
 
     init {
         getProviderSchedules()
     }
 
-    private fun getProviderSchedules() {
-        val availableProviderDates =
-            reservationDataSource.getSchedules(provider.id)
-                .map { it.date.toMilliseconds().toLocalDate() }
-        _uiState.update { it.copy(availableProviderDates = availableProviderDates) }
-    }
-
-    fun getSchedule(date: Long) {
-        reservationDataSource.getSchedule(provider.id, date.toLocalDate())?.let { schedule ->
-            selectedScheduleId = schedule.id
+    fun getSchedule(date: LocalDate) {
+        reservationDataSource.getSchedule(provider.id, date)?.let { schedule ->
+            selectedSchedule = schedule
             val reservations = reservationDataSource.getReservations(schedule.id)
             val timeSlots = mapReservedTimeSlots(schedule, reservations)
             _uiState.update {
@@ -56,6 +50,38 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
                 )
             }
         }
+    }
+
+    fun reserve(timeSlot: TimeSlot, reservationStatus: ReservationStatus) {
+        val ignoreReservation = ignoreIfAlreadyReserved(timeSlot, reservationStatus)
+        if (ignoreReservation) return
+
+        // Create reservation
+        selectedSchedule?.let { schedule ->
+            timeSlot.startTime.toLocalTime()?.let { time ->
+                reservationDataSource.createReservation(
+                    client.id,
+                    provider.id,
+                    schedule.id,
+                    reservationStatus,
+                    time
+                )
+
+                // Refresh schedule
+                getSchedule(schedule.date)
+            }
+        }
+    }
+
+    fun confirmReservation(timeSlot: TimeSlot) {
+        reserve(timeSlot, CONFIRMED)
+    }
+
+    private fun getProviderSchedules() {
+        val availableProviderDates =
+            reservationDataSource.getSchedules(provider.id)
+                .map { it.date.toMilliseconds().toLocalDate() }
+        _uiState.update { it.copy(availableProviderDates = availableProviderDates) }
     }
 
     private fun mapReservedTimeSlots(
@@ -75,34 +101,12 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
     private fun isReservationLocked(reservation: Reservation?) =
         reservation?.status == CONFIRMED || (reservation?.status == RESERVED && reservation.clientId != client.id)
 
-    fun reserve(timeSlot: TimeSlot, reservationStatus: ReservationStatus) {
-        val ignoreReservation = ignoreIfAlreadyReserved(timeSlot, reservationStatus)
-        if (ignoreReservation) return
-
-        // Create reservation
-        selectedScheduleId?.let { scheduleId ->
-            timeSlot.startTime.toLocalTime()?.let { time ->
-                reservationDataSource.createReservation(
-                    client.id,
-                    provider.id,
-                    scheduleId,
-                    reservationStatus,
-                    time
-                )
-            }
-        }
-    }
-
-    fun confirmReservation(timeSlot: TimeSlot) {
-        reserve(timeSlot, CONFIRMED)
-    }
-
     private fun ignoreIfAlreadyReserved(
         timeSlot: TimeSlot,
         reservationStatus: ReservationStatus
     ): Boolean {
         val localTimeSlot = timeSlot.startTime.toLocalTime()
-        val reservations = reservationDataSource.getReservations(selectedScheduleId!!)
+        val reservations = reservationDataSource.getReservations(selectedSchedule!!.id)
         val existingReservation = reservations.find { it.timeSlot == localTimeSlot }
         if (existingReservation != null) {
             if (existingReservation.status == RESERVED && reservationStatus == RESERVED) {
