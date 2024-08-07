@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.update
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,10 +26,10 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
     ViewModel() {
 
     // TODO Allow user to select client
-    private val client = reservationDataSource.getClients().first()
+    private var client = reservationDataSource.getClients().first()
 
     // TODO Allow user to select provider
-    private val provider = reservationDataSource.getProviders().first()
+    private var provider = reservationDataSource.getProviders().first()
 
     private val _uiState = MutableStateFlow(ClientUiState(client = client, provider = provider))
     val uiState: StateFlow<ClientUiState> = _uiState.asStateFlow()
@@ -89,7 +88,7 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
         reservationStatus: ReservationStatus
     ): Boolean {
         val todaysDate =
-            LocalDateTime.of(System.currentTimeMillis().toLocalDate(), LocalTime.now())
+            LocalDateTime.now()
         val reservationTime = LocalDateTime.of(schedule.date, timeSlot.startTime.toLocalTime())
         val isUnder24Hours = Duration.between(todaysDate, reservationTime).toHours() < 24
         if (isUnder24Hours) {
@@ -149,5 +148,15 @@ class ClientViewModel @Inject constructor(private val reservationDataSource: Res
             }
         }
         return false
+    }
+
+    fun changeClient() {
+        val currentClient = uiState.value.client
+        val clients = reservationDataSource.getClients()
+        val nextClientIndex = (clients.indexOf(currentClient) + 1) % clients.size
+        val nextClient = clients[nextClientIndex]
+        client = nextClient
+        getSchedule(LocalDateTime.now().toLocalDate())
+        _uiState.update { it.copy(client = nextClient) }
     }
 }
