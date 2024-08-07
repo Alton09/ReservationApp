@@ -48,25 +48,25 @@ class ReservationDataSourceImpl : ReservationDataSource {
     init {
         createSchedule(
             providerId = providers[0].id,
-            date = LocalDate.of(2024, 7, 30),
+            date = LocalDate.now().plusDays(3),
             startTime = LocalTime.of(8, 0),
             endTime = LocalTime.of(9, 0)
         )
         createSchedule(
             providerId = providers[0].id,
-            date = LocalDate.of(2024, 7, 31),
+            date = LocalDate.now().plusDays(4),
             startTime = LocalTime.of(10, 0),
             endTime = LocalTime.of(11, 0)
         )
         createSchedule(
             providerId = providers[1].id,
-            date = LocalDate.of(2024, 8, 1),
+            date = LocalDate.now().plusDays(5),
             startTime = LocalTime.of(9, 0),
             endTime = LocalTime.of(10, 0)
         )
         createSchedule(
             providerId = providers[2].id,
-            date = LocalDate.of(2024, 8, 3),
+            date = LocalDate.now().plusDays(5),
             startTime = LocalTime.of(14, 0),
             endTime = LocalTime.of(15, 0)
         )
